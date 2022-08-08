@@ -1,0 +1,17 @@
+{
+    "name": "zenhayuuki/record-of-reading",
+    "autoload": {
+        "psr-4": {
+            "Zenhayuuki\\RecordOfReading\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "yuki1229h10",
+            "email": "yuki1229.h10@i.softbank.jp"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.4"
+    }
+}
