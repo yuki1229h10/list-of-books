@@ -29,24 +29,23 @@ function sendVerificationEmail($email, $token)
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
 
-    $mail->setFrom($_ENV['EMAIL'], $_ENV['Yuki']);
+    $mail->setFrom($_ENV['EMAIL'], $_ENV['USER']);
     $mail->addAddress($email);
 
     $mail->isHTML(true);
-    $mail->Subject = mb_encode_mimeheader('Verification to todo-app');
+    $mail->Subject = mb_encode_mimeheader('list-of-books');
     $mail->Body = '<!DOCTYPE html>
         <html lang="en">
 
         <head>
             <meta charset="UTF-8">
-            <title>Verify email</title>
+            <title>メールアドレスの認証</title>
         </head>
 
         <body>
             <div>
-                <p>Thank you for signing up on our website. Please click on the link below
-                    to verify your email.</p>
-                <a href="http://localhost:8888/todo_app/public/index.php?token=' . $token . '">Verify your email address</a>
+                <p>リンクをクリックして認証を行なってください</p>
+                <a href="http://localhost:8888/list-of-books/src/index.php?token=' . $token . '">認証を行う</a>
             </div>
         </body>
 

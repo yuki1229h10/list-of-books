@@ -19,20 +19,35 @@ if (isset($_POST['signup-btn'])) {
     $password_1 = $_POST['password_1'];
     $password_2 = $_POST['password_2'];
 
+    /**名前 */
     if (empty($username)) {
-        $errors['username'] = "Username required";
+        $errors['username'] = "名前を入力してください";
+    }
+    if (preg_match('/( |　)/', $username)) {
+        $errors['username'] = "名前に空白は入力できません";
+    } elseif (preg_match('/\A[[:^cntrl:]]{0,100}\z/u', $username) == 0) {
+        $errors['username'] = "名前は100文字以内で入力してください";
+    }
+
+    /**メールアドレス */
+    if (empty($email)) {
+        $errors['email'] = "メールアドレスを入力してください";
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = "Email address invalid";
+        $errors['email'] = "メールアドレスの形式が間違っています";
     }
-    if (empty($email)) {
-        $errors['email'] = "Email required";
-    }
+
+    /**パスワード */
     if (empty($password_1)) {
-        $errors['password'] = "Password required";
+        $errors['password'] = "パスワードを入力してください";
+    }
+    if (preg_match('/( |　)/', $password_1)) {
+        $errors['password'] = "パスワードに空白は入力できません";
+    } elseif (preg_match('/\A[[:^cntrl:]]{0,100}\z/u', $password_1) == 0) {
+        $errors['password'] = "パスワードは255文字以内で入力してください";
     }
     if ($password_1 !== $password_2) {
-        $errors['password'] = "The two password do not match";
+        $errors['password'] = "パスワードが一致していません";
     }
 
     try {
@@ -41,7 +56,7 @@ if (isset($_POST['signup-btn'])) {
         $mailQuery->execute();
 
         if ($mailQuery->rowCount() > 0) {
-            $errors['email'] = "Email address is already used";
+            $errors['email'] = "メールアドレスは既に使われています";
         }
 
         if (count($errors) === 0) {
@@ -65,10 +80,10 @@ if (isset($_POST['signup-btn'])) {
 
                 sendVerificationEmail($email, $token);
 
-                $_SESSION['message'] = "You are now logged in!";
+                $_SESSION['message'] = "ログインが完了しました";
                 $_SESSION['alert-class'] = "alert-success";
             } else {
-                $errors['db_error'] = "Database error: failed to register";
+                $errors['db_error'] = "Database error: 登録に失敗しました";
             }
             header('location: index.php');
         }
@@ -85,10 +100,10 @@ if (isset($_POST['login-btn'])) {
     $password = $_POST['password_1'];
 
     if (empty($username)) {
-        $errors['username'] = "Username required";
+        $errors['username'] = "名前を入力してください";
     }
     if (empty($password)) {
-        $errors['password'] = "Password required";
+        $errors['password'] = "パスワードを入力してください";
     }
 
     try {
@@ -105,12 +120,12 @@ if (isset($_POST['login-btn'])) {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['verified'] = $user['verified'];
 
-                $_SESSION['message'] = "You are now logged in!";
+                $_SESSION['message'] = "ログインが完了しました";
                 $_SESSION['alert-class'] = "alert-success";
                 header('location: index.php');
                 exit();
             } else {
-                $errors['login_fail'] = "Wrong credentials";
+                $errors['login_fail'] = "入力情報が正しくありません";
             }
         }
     } catch (PDOException $e) {
@@ -149,12 +164,12 @@ function verifyUser($token)
             $_SESSION['email'] = $user['email'];
             $_SESSION['verified'] = 1;
 
-            $_SESSION['message'] = "Your email address was successfully verified!";
+            $_SESSION['message'] = "メールアドレスは認証されました";
             $_SESSION['alert-class'] = "alert-success";
             header('location: index.php');
             exit();
         } else {
-            echo 'User not found';
+            echo 'ユーザーが見つかりません';
         }
     }
 }
