@@ -10,9 +10,40 @@ $errors = array();
 $username = '';
 $email = '';
 
+function verifyUser($token)
+{
+    global $db;
+    $verifyQuery = ("SELECT * FROM users WHERE token = :token LIMIT 1");
+    $verifyStmt = $db->prepare($verifyQuery);
+    $verifyStmt->bindValue(':token', $token, PDO::PARAM_STR);
+    $verifyStmt->execute();
+
+    if ($verifyStmt->rowCount() > 0) {
+        $user = $verifyStmt->fetch(PDO::FETCH_ASSOC);
+        $updateVerifyQuery = ("UPDATE users SET verified = 1 WHERE token = :token");
+        $updateVerifyStmt = $db->prepare($updateVerifyQuery);
+        $updateVerifyStmt->bindValue(':token', $token, PDO::PARAM_STR);
+
+        if ($updateVerifyStmt->execute()) {
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['verified'] = 1;
+            $_SESSION['message'] = "メールアドレスは認証されました";
+            $_SESSION['alert-class'] = "alert-success";
+            header('location: new.php');
+            exit();
+        } else {
+            echo 'ユーザーが見つかりません';
+        }
+    }
+}
+
 /**
  * signup-btn
  */
+
+/**サインアップのバリデート */
 if (isset($_POST['signup-btn'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -43,7 +74,7 @@ if (isset($_POST['signup-btn'])) {
     }
     if (preg_match('/( |　)/', $password_1)) {
         $errors['password'] = "パスワードに空白は入力できません";
-    } elseif (preg_match('/\A[[:^cntrl:]]{0,100}\z/u', $password_1) == 0) {
+    } elseif (preg_match('/\A[[:^cntrl:]]{0,255}\z/u', $password_1) == 0) {
         $errors['password'] = "パスワードは255文字以内で入力してください";
     }
     if ($password_1 !== $password_2) {
@@ -51,27 +82,33 @@ if (isset($_POST['signup-btn'])) {
     }
 
     try {
-        $mailQuery = $db->prepare("SELECT email FROM users WHERE email = :email");
-        $mailQuery->bindValue(':email', $email, PDO::PARAM_STR);
-        $mailQuery->execute();
+        /**メールアドレスの存在チェック */
+        $checkEmailQuery = ("SELECT email FROM users WHERE email = :email");
+        $checkEmailStmt = $db->prepare($checkEmailQuery);
+        $checkEmailStmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $checkEmailStmt->execute();
 
-        if ($mailQuery->rowCount() > 0) {
+        if ($checkEmailStmt->rowCount() > 0) {
             $errors['email'] = "メールアドレスは既に使われています";
         }
 
+        /**上記までにエラーが存在しなかったらユーザー情報を登録 */
         if (count($errors) === 0) {
             $password_1 = password_hash($password_1, PASSWORD_DEFAULT);
             $token = bin2hex(random_bytes(32));
             $verified = false;
 
-            $statement = $db->prepare("INSERT INTO users (username, email, verified, token, password) VALUES (:username, :email, :verified, :token, :password)");
-            $statement->bindValue(':username', $username, PDO::PARAM_STR);
-            $statement->bindValue(':email', $email, PDO::PARAM_STR);
-            $statement->bindValue(':verified', intval($verified), PDO::PARAM_INT);
-            $statement->bindValue(':token', $token, PDO::PARAM_STR);
-            $statement->bindValue(':password', $password_1, PDO::PARAM_STR);
+            /**ユーザー情報をINSERT */
+            $insertUsersQuery = ("INSERT INTO users (username, email, verified, token, password) VALUES (:username, :email, :verified, :token, :password");
+            $insertUsersStmt = $db->prepare($insertUsersQuery);
+            $insertUsersStmt->bindValue(':username', $username, PDO::PARAM_STR);
+            $insertUsersStmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $insertUsersStmt->bindValue(':verified', intval($verified), PDO::PARAM_INT);
+            $insertUsersStmt->bindValue(':token', $token, PDO::PARAM_STR);
+            $insertUsersStmt->bindValue(':password', $password_1, PDO::PARAM_STR);
 
-            if ($statement->execute()) {
+            if ($insertUsersStmt->execute()) {
+                /**セッションにデータを格納 */
                 $user_id = $db->lastInsertId();
                 $_SESSION['id'] = $user_id;
                 $_SESSION['username'] = $username;
@@ -85,12 +122,13 @@ if (isset($_POST['signup-btn'])) {
             } else {
                 $errors['db_error'] = "Database error: 登録に失敗しました";
             }
-            header('location: index.php');
+            header('location: new.php');
         }
     } catch (PDOException $e) {
         die("Error: {$e->getMessage()}");
     }
 }
+
 
 /**
  * login-btn
@@ -122,7 +160,7 @@ if (isset($_POST['login-btn'])) {
 
                 $_SESSION['message'] = "ログインが完了しました";
                 $_SESSION['alert-class'] = "alert-success";
-                header('location: index.php');
+                header('location: new.php');
                 exit();
             } else {
                 $errors['login_fail'] = "入力情報が正しくありません";
@@ -144,32 +182,4 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['verified']);
     header('location: login.php');
     exit();
-}
-
-function verifyUser($token)
-{
-    global $db;
-    $verifyQuery = $db->prepare("SELECT * FROM users WHERE token = :token LIMIT 1");
-    $verifyQuery->bindValue(':token', $token, PDO::PARAM_STR);
-    $verifyQuery->execute();
-
-    if ($verifyQuery->rowCount() > 0) {
-        $user = $verifyQuery->fetch(PDO::FETCH_ASSOC);
-        $updateQuery = $db->prepare("UPDATE users SET verified = 1 WHERE token= :token");
-        $updateQuery->bindValue(':token', $token, PDO::PARAM_STR);
-
-        if ($updateQuery->execute()) {
-            $_SESSION['id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['verified'] = 1;
-
-            $_SESSION['message'] = "メールアドレスは認証されました";
-            $_SESSION['alert-class'] = "alert-success";
-            header('location: index.php');
-            exit();
-        } else {
-            echo 'ユーザーが見つかりません';
-        }
-    }
 }
