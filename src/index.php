@@ -1,7 +1,20 @@
 <?php
+ini_set("display_errors", 'On');
+error_reporting(E_ALL);
 
+require_once 'controllers/authController.php';
 require_once 'lib/db.php';
 require_once 'lib/escape.php';
+
+// if (isset($_GET['token'])) {
+//   $token = $_GET['token'];
+//   verifyUser($token);
+// }
+
+if (!isset($_SESSION['id'])) {
+  header('location: login.php');
+  exit();
+}
 
 ?>
 
@@ -16,6 +29,7 @@ require_once 'lib/escape.php';
 </head>
 
 <body>
+  <a href="new.php">戻る</a>
   <table>
     <thead>
       <tr>
@@ -46,12 +60,20 @@ require_once 'lib/escape.php';
               </td>
               <td>
                 <select name="status">
-                  <option value="読んでいない"><?php echo ($row['status']) ?></option>
-                  <option value="読んでる"><?php echo ($row['status']) ?></option>
-                  <option value="読み終えた"><?php echo ($row['status']) ?></option>
+                  <option value="読んでいない" <?php if ($row['status'] == "読んでいない") echo 'selected="selected"'; ?>>読んでいない</option>
+                  <option value="読んでる" <?php if ($row['status'] == "読んでる") echo 'selected="selected"'; ?>>読んでる</option>
+                  <option value="読み終えた" <?php if ($row['status'] == "読み終えた") echo 'selected="selected"'; ?>>読み終えた</option>
                 </select>
               </td>
-              <td><?php echo h($row['score']) ?></td>
+              <td>
+                <select name="score">
+                  <option value="1" <?php if ($row['score'] == "1") echo 'selected="selected"'; ?>>1</option>
+                  <option value="2" <?php if ($row['score'] == "2") echo 'selected="selected"'; ?>>2</option>
+                  <option value="3" <?php if ($row['score'] == "3") echo 'selected="selected"'; ?>>3</option>
+                  <option value="4" <?php if ($row['score'] == "4") echo 'selected="selected"'; ?>>4</option>
+                  <option value="5" <?php if ($row['score'] == "5") echo 'selected="selected"'; ?>>5</option>
+                </select>
+              </td>
               <td><?php echo h($row['note']) ?></td>
             </tr>
           </form>
@@ -63,6 +85,7 @@ require_once 'lib/escape.php';
       ?>
     </tbody>
   </table>
+  <script src="script.js"></script>
 </body>
 
 </html>

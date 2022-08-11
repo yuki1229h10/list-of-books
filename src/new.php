@@ -78,6 +78,7 @@ if (isset($_POST['create-btn'])) {
         } catch (PDOException $e) {
             die("Error: {$e->getMessage()}");
         }
+        header('location: index.php');
     }
 }
 ?>
