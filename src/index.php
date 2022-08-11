@@ -38,19 +38,22 @@ if (!isset($_SESSION['id'])) {
         <th>読書状況</th>
         <th>評価</th>
         <th>メモ</th>
+        <th>投稿日時</th>
+        <th>更新日時</th>
       </tr>
     </thead>
     <tbody>
-      <?php
-      try {
-        $db = getDb();
-        $readListQuery = "SELECT * FROM books";
-        $readListStmt = $db->prepare($readListQuery);
-        $readListStmt->execute();
+      <form action="">
+        <input type="submit" name="update" value="更新">
+        <?php
+        try {
+          $db = getDb();
+          $readListQuery = "SELECT * FROM books";
+          $readListStmt = $db->prepare($readListQuery);
+          $readListStmt->execute();
 
-        while ($row = $readListStmt->fetch(PDO::FETCH_ASSOC)) {
-      ?>
-          <form action="">
+          while ($row = $readListStmt->fetch(PDO::FETCH_ASSOC)) {
+        ?>
             <tr>
               <td>
                 <input type="text" name="title" value="<?php echo h($row['title']) ?>">
@@ -74,15 +77,23 @@ if (!isset($_SESSION['id'])) {
                   <option value="5" <?php if ($row['score'] == "5") echo 'selected="selected"'; ?>>5</option>
                 </select>
               </td>
-              <td><?php echo h($row['note']) ?></td>
+              <td>
+                <textarea name="note" id="note" cols="30" rows="5"><?php echo h($row['note']) ?></textarea>
+              </td>
+              <td>
+                <?php echo $row['created_at'] ?>
+              </td>
+              <td>
+                <?php echo $row['updated_at'] ?>
+              </td>
             </tr>
-          </form>
-      <?php
+        <?php
+          }
+        } catch (PDOException $e) {
+          die("エラーメッセージ:{$e->getMessage()}");
         }
-      } catch (PDOException $e) {
-        die("エラーメッセージ:{$e->getMessage()}");
-      }
-      ?>
+        ?>
+      </form>
     </tbody>
   </table>
   <script src="script.js"></script>
