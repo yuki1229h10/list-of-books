@@ -16,13 +16,19 @@ if (!isset($_SESSION['id'])) {
   exit();
 }
 
+$recordNumber = '';
+
 try {
   $db = getDb();
-  $readListQuery = "SELECT * FROM books";
+  $readListQuery = "SELECT * FROM books ORDER BY updated_at DESC";
   $readListStmt = $db->prepare($readListQuery);
+  $readListStmt->bindParam(':updated_at', $updated_at);
   $readListStmt->execute();
-  $readItemCount = $readListStmt->rowCount();
 
+  $updated_at = 1;
+
+  var_dump($updated_at);
+  // $readItemCount = $readListStmt->rowCount();
 ?>
 
   <!DOCTYPE html>
@@ -37,9 +43,11 @@ try {
 
   <body>
     <a href="new.php">戻る</a>
+    <!-- <?php echo $readItemCount ?> -->
     <table>
       <thead>
         <tr>
+          <th>番号</th>
           <th>書籍名</th>
           <th>著者名</th>
           <th>読書状況</th>
@@ -54,8 +62,16 @@ try {
           <?php
 
           while ($row = $readListStmt->fetch(PDO::FETCH_ASSOC)) {
+            // $recordItemCount++;
+            $updated_at++;
           ?>
-            <tr>
+            <tr style="background-color: red;">
+              <td>
+                <!-- <?php if ($recordNumber === $readItemCount) {
+                      } ?> -->
+                <!-- <?php echo $recordNumber ?> -->
+                <?php echo $updated_at ?>
+              </td>
               <td>
                 <?php echo h($row['title']) ?>
               </td>
