@@ -16,43 +16,45 @@ if (!isset($_SESSION['id'])) {
   exit();
 }
 
+try {
+  $db = getDb();
+  $readListQuery = "SELECT * FROM books";
+  $readListStmt = $db->prepare($readListQuery);
+  $readListStmt->execute();
+  $readItemCount = $readListStmt->rowCount();
+
 ?>
 
-<!DOCTYPE html>
-<html lang="ja">
+  <!DOCTYPE html>
+  <html lang="ja">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>読書一覧</title>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>読書一覧</title>
+  </head>
 
-<body>
-  <a href="new.php">戻る</a>
-  <table>
-    <thead>
-      <tr>
-        <th>書籍名</th>
-        <th>著者名</th>
-        <th>読書状況</th>
-        <th>評価</th>
-        <th>メモ</th>
-        <th>投稿日時</th>
-        <th>更新日時</th>
-      </tr>
-    </thead>
-    <tbody>
-      <form action="" method="POST">
-        <?php
-        try {
-          $db = getDb();
-          $readListQuery = "SELECT * FROM books";
-          $readListStmt = $db->prepare($readListQuery);
-          $readListStmt->execute();
+  <body>
+    <a href="new.php">戻る</a>
+    <table>
+      <thead>
+        <tr>
+          <th>書籍名</th>
+          <th>著者名</th>
+          <th>読書状況</th>
+          <th>評価</th>
+          <th>メモ</th>
+          <th>投稿日時</th>
+          <th>更新日時</th>
+        </tr>
+      </thead>
+      <tbody>
+        <form action="" method="POST">
+          <?php
 
           while ($row = $readListStmt->fetch(PDO::FETCH_ASSOC)) {
-        ?>
+          ?>
             <tr>
               <td>
                 <?php echo h($row['title']) ?>
@@ -79,7 +81,7 @@ if (!isset($_SESSION['id'])) {
                 <a href="edit.php?id=<?php echo $row['id']; ?>">編集</a>
               </td>
               <td>
-                <a href="">削除</a>
+                <a href="delete_done?id=<?php echo $row['id'] ?>">削除</a>
               </td>
             </tr>
         <?php
@@ -88,10 +90,10 @@ if (!isset($_SESSION['id'])) {
           die("エラーメッセージ:{$e->getMessage()}");
         }
         ?>
-      </form>
-    </tbody>
-  </table>
-  <script src="script.js"></script>
-</body>
+        </form>
+      </tbody>
+    </table>
+    <script src="script.js"></script>
+  </body>
 
-</html>
+  </html>
