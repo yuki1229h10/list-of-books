@@ -67,7 +67,8 @@ if (isset($_POST['create-btn'])) {
 
         try {
             $userEmail = $_SESSION['email'];
-            $createQuery = $db->prepare("INSERT INTO books (email, title, author, status, score, note) VALUES (:email, :title, :author, :status, :score, :note)");
+            $createQuery = $db->prepare("INSERT INTO books (id, email, title, author, status, score, note) VALUES (:id, :email, :title, :author, :status, :score, :note)");
+            $createQuery->bindValue(':id', $id, PDO::PARAM_INT);
             $createQuery->bindValue(':email', $userEmail, PDO::PARAM_STR);
             $createQuery->bindValue(':title', $title, PDO::PARAM_STR);
             $createQuery->bindValue(':author', $author, PDO::PARAM_STR);
