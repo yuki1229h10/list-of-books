@@ -2,7 +2,7 @@
 require_once 'controllers/authController.php';
 require_once 'lib/escape.php';
 
-$errors = [];
+$errors = array();
 var_dump($_SESSION);
 ?>
 

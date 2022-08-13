@@ -14,8 +14,7 @@ try {
   $readListQuery = "SELECT * FROM books ORDER BY updated_at DESC";
   $readListStmt = $db->prepare($readListQuery);
   $readListStmt->execute();
-
-  $readItemCount = $readListStmt->rowCount();
+  $readRecordCount = $readListStmt->rowCount();
 ?>
 
   <!DOCTYPE html>
@@ -29,8 +28,9 @@ try {
   </head>
 
   <body>
+    <h1>読書一覧</h1>
     <a href="new.php">戻る</a>
-    <?php echo $readItemCount ?>
+    <?php echo $readRecordCount ?>
     <table>
       <thead>
         <tr>
@@ -73,18 +73,18 @@ try {
               <a href="edit.php?id=<?php echo $row['id']; ?>">編集</a>
             </td>
             <td>
-              <a href="delete.php?id=<?php echo $row['id'] ?>" id="delete-btn" onclick="return deleteFunc()">削除</a>
+              <a href="controllers/deleteController.php?id=<?php echo $row['id'] ?>" onclick="return deleteFunc()">削除</a>
             </td>
           </tr>
       <?php
         }
       } catch (PDOException $e) {
-        die("Error :{$e->getMessage()}");
+        die("Error: {$e->getMessage()}");
       }
       ?>
       </tbody>
     </table>
-    <script src="script.js"></script>
+    <script src="controllers/script.js"></script>
   </body>
 
   </html>

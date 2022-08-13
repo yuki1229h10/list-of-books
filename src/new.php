@@ -56,9 +56,7 @@ if (isset($_POST['create-btn'])) {
     }
 
     /**メモ */
-    if (!strlen($note)) {
-        $errors['note'] = 'メモを入力してください';
-    } elseif (strlen($note) > 255) {
+    if (strlen($note) > 255) {
         $errors['note'] = 'メモは255文字以内で入力してください';
     }
 
