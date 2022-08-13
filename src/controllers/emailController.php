@@ -4,9 +4,9 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-require __DIR__ . '../../../vendor/autoload.php';
 require_once 'controllers/authController.php';
 require_once 'lib/db.php';
+require __DIR__ . '../../../vendor/autoload.php';
 
 require_once '../PHPMailer/src/Exception.php';
 require_once '../PHPMailer/src/PHPMailer.php';
@@ -35,7 +35,7 @@ function sendVerificationEmail($email, $token)
     $mail->isHTML(true);
     $mail->Subject = mb_encode_mimeheader('list-of-books');
     $mail->Body = '<!DOCTYPE html>
-        <html lang="en">
+        <html lang="ja">
 
         <head>
             <meta charset="UTF-8">
@@ -44,8 +44,9 @@ function sendVerificationEmail($email, $token)
 
         <body>
             <div>
+                <p>ありがとうございます</p>
                 <p>リンクをクリックして認証を行なってください</p>
-                <a href="http://localhost:8888/list-of-books/src/index.php?token=' . $token . '">認証を行う</a>
+                <a href="http://localhost:8888/list-of-books/src/new.php?token=' . $token . '">認証を行う</a>
             </div>
         </body>
 

@@ -89,6 +89,14 @@ input {
   opacity: var(--opacity);
 }
 
+.center {
+  text-align: center;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
 .auth {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -191,6 +199,14 @@ input {
   color: var(--color-primary);
 }
 
+.heading-h1 {
+  font-size: 3.8rem;
+}
+
+.heading-h2 {
+  font-size: 3.6rem;
+}
+
 .heading-h3 {
   font-size: 2.6rem;
 }
@@ -201,6 +217,10 @@ input {
 
 .input-text {
   font-size: 1.6rem;
+}
+
+.div-text {
+  font-size: 2rem;
 }
 
 .p-text {

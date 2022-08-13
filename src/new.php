@@ -89,37 +89,37 @@ if (isset($_POST['create-btn'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>ホーム</title>
+    <link rel="stylesheet" href="stylesheets/css/main.css">
 </head>
 
 <body>
     <div>
         <div>
 
-            <?php if (isset($_SESSION['message'])) : ?>
-                <div class="alert <?php echo $_SESSION['alert-class']; ?>">
-                    <?php
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
-                    unset($_SESSION['alert-class']);
-                    ?>
-                </div>
+            <?php if ($_SESSION['verified']) : ?>
+                <a href="login.php?logout=1">logout</a>
+                <a href="index.php">読書一覧</a>
             <?php endif; ?>
 
-            <h3>Welcome, <?php echo h($_SESSION['username']); ?></h3>
-
-            <a href="login.php?logout=1">logout</a>
-            <a href="index.php">読書一覧</a>
-
+            <!-- /**メールアドレスの認証がまだ行われていない場合 */ -->
             <?php if (!$_SESSION['verified']) : ?>
-                <div>
-                    You need to verify your account.
-                    Sign in to your email account and click on the
-                    verification link we just emailed you at
-                    <strong><?php echo $_SESSION['email']; ?></strong>
+                <div class="auth">
+                    <div class="auth__form-wrapper">
+                        <h1 class="heading-h1 auth__top">Welcome, <?php echo h($_SESSION['username']); ?></h1>
+                        <div class="auth__inner">
+                            <div class="div-text center mb-2">
+                                <?php echo h($_SESSION['email']); ?>
+                            </div>
+                            <div class="div-text">
+                                上記のメールアドレスに送信されたURLから登録を行なってください
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
 
+            <!-- /**メールアドレスの認証が行われた後 */ -->
             <?php if ($_SESSION['verified']) : ?>
 
                 <h1>読書記録</h1>

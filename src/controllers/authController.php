@@ -10,6 +10,7 @@ $errors = array();
 $username = '';
 $email = '';
 
+/**ユーザーを認証する */
 function verifyUser($token)
 {
     global $db;
@@ -18,6 +19,7 @@ function verifyUser($token)
     $verifyStmt->bindValue(':token', $token, PDO::PARAM_STR);
     $verifyStmt->execute();
 
+    /**ユーザーが存在していたら */
     if ($verifyStmt->rowCount() > 0) {
         $user = $verifyStmt->fetch(PDO::FETCH_ASSOC);
         $updateVerifyQuery = ("UPDATE users SET verified = 1 WHERE token = :token");
@@ -30,7 +32,6 @@ function verifyUser($token)
             $_SESSION['email'] = $user['email'];
             $_SESSION['verified'] = 1;
             $_SESSION['message'] = "メールアドレスは認証されました";
-            $_SESSION['alert-class'] = "alert-success";
             header('location: new.php');
             exit();
         } else {
@@ -99,7 +100,7 @@ if (isset($_POST['signup-btn'])) {
             $verified = false;
 
             /**ユーザー情報をINSERT */
-            $insertUsersQuery = ("INSERT INTO users (username, email, verified, token, password) VALUES (:username, :email, :verified, :token, :password");
+            $insertUsersQuery = "INSERT INTO users (username, email, verified, token, password) VALUES (:username, :email, :verified, :token, :password)";
             $insertUsersStmt = $db->prepare($insertUsersQuery);
             $insertUsersStmt->bindValue(':username', $username, PDO::PARAM_STR);
             $insertUsersStmt->bindValue(':email', $email, PDO::PARAM_STR);
@@ -114,7 +115,7 @@ if (isset($_POST['signup-btn'])) {
                 $_SESSION['username'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['verified'] = $verified;
-
+                /**メールアドレスから認証を行わせる */
                 sendVerificationEmail($email, $token);
 
                 $_SESSION['message'] = "ログインが完了しました";
@@ -123,12 +124,12 @@ if (isset($_POST['signup-btn'])) {
                 $errors['db_error'] = "Database error: 登録に失敗しました";
             }
             header('location: new.php');
+            exit();
         }
     } catch (PDOException $e) {
         die("Error: {$e->getMessage()}");
     }
 }
-
 
 /**
  * login-btn
@@ -137,11 +138,18 @@ if (isset($_POST['login-btn'])) {
     $username = $_POST['username'];
     $password = $_POST['password_1'];
 
+    /**名前かメールアドレス */
     if (empty($username)) {
-        $errors['username'] = "名前を入力してください";
+        $errors['username'] = "名前 or メールアドレスを入力してください";
+    } elseif (preg_match('/( |　)/', $username)) {
+        $errors['username'] = "空白は入力できません";
     }
+
+    /**パスワード */
     if (empty($password)) {
         $errors['password'] = "パスワードを入力してください";
+    } elseif (preg_match('/( |　)/', $password)) {
+        $errors['password'] = "空白は入力できません";
     }
 
     try {
