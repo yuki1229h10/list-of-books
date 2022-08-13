@@ -1,34 +1,21 @@
 <?php
-ini_set("display_errors", 'On');
-error_reporting(E_ALL);
 
 require_once 'controllers/authController.php';
 require_once 'lib/db.php';
 require_once 'lib/escape.php';
-
-// if (isset($_GET['token'])) {
-//   $token = $_GET['token'];
-//   verifyUser($token);
-// }
 
 if (!isset($_SESSION['id'])) {
   header('location: login.php');
   exit();
 }
 
-$recordNumber = '';
-
 try {
   $db = getDb();
   $readListQuery = "SELECT * FROM books ORDER BY updated_at DESC";
   $readListStmt = $db->prepare($readListQuery);
-  $readListStmt->bindParam(':updated_at', $updated_at);
   $readListStmt->execute();
 
-  $updated_at = 1;
-
-  var_dump($updated_at);
-  // $readItemCount = $readListStmt->rowCount();
+  $readItemCount = $readListStmt->rowCount();
 ?>
 
   <!DOCTYPE html>
@@ -43,11 +30,10 @@ try {
 
   <body>
     <a href="new.php">戻る</a>
-    <!-- <?php echo $readItemCount ?> -->
+    <?php echo $readItemCount ?>
     <table>
       <thead>
         <tr>
-          <th>番号</th>
           <th>書籍名</th>
           <th>著者名</th>
           <th>読書状況</th>
@@ -58,55 +44,44 @@ try {
         </tr>
       </thead>
       <tbody>
-        <form action="" method="POST">
-          <?php
-
-          while ($row = $readListStmt->fetch(PDO::FETCH_ASSOC)) {
-            // $recordItemCount++;
-            $updated_at++;
-          ?>
-            <tr style="background-color: red;">
-              <td>
-                <!-- <?php if ($recordNumber === $readItemCount) {
-                      } ?> -->
-                <!-- <?php echo $recordNumber ?> -->
-                <?php echo $updated_at ?>
-              </td>
-              <td>
-                <?php echo h($row['title']) ?>
-              </td>
-              <td>
-                <?php echo h($row['author']) ?>
-              </td>
-              <td>
-                <?php echo h($row['status']) ?>
-              </td>
-              <td>
-                <?php echo h($row['score']) ?>
-              </td>
-              <td>
-                <?php echo h($row['note']) ?>
-              </td>
-              <td>
-                <?php echo $row['created_at'] ?>
-              </td>
-              <td>
-                <?php if ($row['updated_at']) echo $row['updated_at'] ?>
-              </td>
-              <td>
-                <a href="edit.php?id=<?php echo $row['id']; ?>">編集</a>
-              </td>
-              <td>
-                <a href="delete_done?id=<?php echo $row['id'] ?>">削除</a>
-              </td>
-            </tr>
         <?php
-          }
-        } catch (PDOException $e) {
-          die("エラーメッセージ:{$e->getMessage()}");
-        }
+        while ($row = $readListStmt->fetch(PDO::FETCH_ASSOC)) {
         ?>
-        </form>
+          <tr>
+            <td>
+              <?php echo h($row['title']) ?>
+            </td>
+            <td>
+              <?php echo h($row['author']) ?>
+            </td>
+            <td>
+              <?php echo h($row['status']) ?>
+            </td>
+            <td>
+              <?php echo h($row['score']) ?>
+            </td>
+            <td>
+              <?php echo h($row['note']) ?>
+            </td>
+            <td>
+              <?php echo h($row['created_at']) ?>
+            </td>
+            <td>
+              <?php echo h($row['updated_at']) ?>
+            </td>
+            <td>
+              <a href="edit.php?id=<?php echo $row['id']; ?>">編集</a>
+            </td>
+            <td>
+              <a href="delete.php?id=<?php echo $row['id'] ?>" id="delete-btn" onclick="return deleteFunc()">削除</a>
+            </td>
+          </tr>
+      <?php
+        }
+      } catch (PDOException $e) {
+        die("Error :{$e->getMessage()}");
+      }
+      ?>
       </tbody>
     </table>
     <script src="script.js"></script>

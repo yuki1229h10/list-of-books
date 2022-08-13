@@ -6,3 +6,5 @@
 -- score int(20),
 -- note varchar(255)
 -- )default character set=utf8mb4
+
+-- select row_number() over (order by updated_at asc) number, title, author, status, score, note, created_at, updated_at from books;

@@ -12,11 +12,6 @@ try {
   $selectListQuery = "SELECT * FROM books WHERE id = :id";
   $selectListStmt = $db->prepare($selectListQuery);
   $selectListStmt->bindParam(':id', $id);
-  // $selectListStmt->bindParam(':title', $title);
-  // $selectListStmt->bindParam(':author', $author);
-  // $selectListStmt->bindParam(':status', $status);
-  // $selectListStmt->bindParam(':score', $score);
-  // $selectListStmt->bindParam(':note', $note);
 
   if ($selectListStmt->execute()) {
     $row = $selectListStmt->fetch(PDO::FETCH_ASSOC);
@@ -27,10 +22,10 @@ try {
     $note = $row['note'];
   }
 } catch (PDOException $e) {
-  echo $e->getMessage();
-  die();
+  die("Error :{$e->getMessage()}");
 }
 
+var_dump($_GET['id']);
 var_dump($row['title']);
 var_dump($row['author']);
 var_dump($row['status']);
