@@ -35,15 +35,11 @@ try {
 
 if (isset($_POST['update-btn'])) {
 
-  if (array_key_exists('status', $_POST)) {
-    $status = $_POST['status'];
-  }
-
   /**編集した項目を変数に落としこむ */
   $id = $_POST['id'];
   $title = $_POST['title'];
   $author = $_POST['author'];
-  $status;
+  $status = $_POST['status'];
   $score = $_POST['score'];
   $note = $_POST['note'];
 
