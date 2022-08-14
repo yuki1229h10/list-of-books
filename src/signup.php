@@ -1,6 +1,8 @@
 <?php
+
 require_once 'controllers/authController.php';
 require_once 'lib/escape.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -34,13 +36,13 @@ require_once 'lib/escape.php';
                         <div class="auth__icon-wrapper">
                             <span class="fa-solid fa-user auth__icon"></span>
                         </div>
-                        <input type="text" name="username" value="<?php echo h($username); ?>" placeholder="名前" class="input-text auth__input">
+                        <input type="text" name="username" value="<?php echo escape($username); ?>" placeholder="名前" class="input-text auth__input">
                     </div>
                     <div class="auth__input-wrapper">
                         <div class="auth__icon-wrapper">
                             <span class="fa-solid fa-envelope auth__icon"></span>
                         </div>
-                        <input type="email" name="email" value="<?php echo h($email); ?>" placeholder="メールアドレス" class="input-text auth__input">
+                        <input type="email" name="email" value="<?php echo escape($email); ?>" placeholder="メールアドレス" class="input-text auth__input">
                     </div>
                     <div class="auth__input-wrapper">
                         <div class="auth__icon-wrapper">

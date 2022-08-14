@@ -1,7 +1,7 @@
 <?php
 ini_set("display_errors", 'On');
 error_reporting(E_ALL);
-require_once 'controllers/emailController.php';
+require_once 'emailController.php';
 require_once 'lib/db.php';
 session_start();
 
@@ -31,7 +31,6 @@ function verifyUser($token)
             $_SESSION['username'] = $user['username'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['verified'] = 1;
-            $_SESSION['message'] = "メールアドレスは認証されました";
             header('location: new.php');
             exit();
         } else {
@@ -57,26 +56,24 @@ if (isset($_POST['signup-btn'])) {
     }
     if (preg_match('/( |　)/', $username)) {
         $errors['username'] = "名前に空白は入力できません";
-    } elseif (preg_match('/\A[[:^cntrl:]]{0,100}\z/u', $username) == 0) {
-        $errors['username'] = "名前は100文字以内で入力してください";
+    } elseif (mb_strlen($username) > 20) {
+        $errors['username'] = "名前は20文字以内で入力してください";
     }
 
     /**メールアドレス */
+    if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/iD", $email)) {
+        $errors['email'] = "メールアドレスの形式が間違っています";
+    }
     if (empty($email)) {
         $errors['email'] = "メールアドレスを入力してください";
     }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = "メールアドレスの形式が間違っています";
-    }
 
     /**パスワード */
-    if (empty($password_1)) {
-        $errors['password'] = "パスワードを入力してください";
+    if (!preg_match("/\A(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,20}+\z/", $password_1)) {
+        $errors['password'] = "パスワードは半角英小文字大文字数字をそれぞれ1種類以上含む8文字以上20文字以下で入力してください";
     }
     if (preg_match('/( |　)/', $password_1)) {
         $errors['password'] = "パスワードに空白は入力できません";
-    } elseif (preg_match('/\A[[:^cntrl:]]{0,255}\z/u', $password_1) == 0) {
-        $errors['password'] = "パスワードは255文字以内で入力してください";
     }
     if ($password_1 !== $password_2) {
         $errors['password'] = "パスワードが一致していません";
@@ -115,13 +112,11 @@ if (isset($_POST['signup-btn'])) {
                 $_SESSION['username'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['verified'] = $verified;
+                $_SESSION['token'] = $token;
                 /**メールアドレスから認証を行わせる */
                 sendVerificationEmail($email, $token);
-
-                $_SESSION['message'] = "ログインが完了しました";
-                $_SESSION['alert-class'] = "alert-success";
             } else {
-                $errors['db_error'] = "Database error: 登録に失敗しました";
+                $errors['db_error'] = "Error: 登録に失敗しました";
             }
             header('location: new.php');
             exit();
@@ -166,8 +161,6 @@ if (isset($_POST['login-btn'])) {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['verified'] = $user['verified'];
 
-                $_SESSION['message'] = "ログインが完了しました";
-                $_SESSION['alert-class'] = "alert-success";
                 header('location: new.php');
                 exit();
             } else {

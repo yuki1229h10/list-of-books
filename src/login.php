@@ -1,6 +1,8 @@
 <?php
+
 require_once 'controllers/authController.php';
 require_once 'lib/escape.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +36,7 @@ require_once 'lib/escape.php';
                         <div class="auth__icon-wrapper">
                             <span class="fa-solid fa-user auth__icon"></span>
                         </div>
-                        <input type="text" name="username" value="<?php echo h($username); ?>" placeholder="名前 or メールアドレス" class="input-text auth__input">
+                        <input type="text" name="username" value="<?php echo escape($username); ?>" placeholder="名前 or メールアドレス" class="input-text auth__input">
                     </div>
                     <div class="auth__input-wrapper">
                         <div class="auth__icon-wrapper">
@@ -43,7 +45,7 @@ require_once 'lib/escape.php';
                         <input type="password" name="password_1" placeholder="パスワード" class="input-text auth__input">
                     </div>
                     <div class="auth__btn-wrapper">
-                        <button type="submit" name="login-btn" class="btn auth__btn">読書記録を始める</button>
+                        <button type="submit" name="login-btn" class="btn auth__btn">ログインする</button>
                     </div>
                     <div class="auth__text-wrapper">
                         <p class="p-text auth__text">まだ登録していない方は</p>

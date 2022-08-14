@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-require_once 'controllers/authController.php';
+require_once 'authController.php';
 require_once 'lib/db.php';
 require __DIR__ . '../../../vendor/autoload.php';
 

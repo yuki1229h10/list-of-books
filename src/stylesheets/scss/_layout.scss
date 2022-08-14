@@ -58,7 +58,6 @@
         border-bottom-right-radius: 10px;
         border-left: none;
         border-top-right-radius: 10px;
-        outline: none;
         padding-left: 1rem;
         width: 100%;
     }
@@ -81,5 +80,106 @@
 
     &__link {
         color: var(--color-primary);
+    }
+}
+
+.new {
+    &__form-wrapper {
+        background-color: var(--color-white);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+    }
+
+    &__column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__btn {
+        width: 30%;
+    }
+}
+
+.index {
+    background-color: var(--color-white);
+    box-shadow: var(--shadow);
+
+    &__top {
+        padding: 2rem;
+    }
+
+    &__table {
+        background-color: var(--color-silver);
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    &__th {
+        padding: 1rem;
+        border-bottom: 1px solid var(--color-black);
+        border-top: 1px solid var(--color-black);
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--color-black);
+        }
+    }
+
+    &__tbody {
+        background-color: var(--color-white);
+    }
+
+    &__tr {
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--color-black);
+        }
+    }
+
+    &__td {
+        padding: 1rem;
+        &:not(:last-child) {
+            border-right: 1px solid var(--color-black);
+        }
+    }
+
+    &__btn {
+        color: var(--color-black);
+    }
+
+    &__flex {
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
+.header {
+    background-color: var(--color-primary);
+
+    &__nav {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__left {
+        color: var(--color-white);
+        padding-left: 2rem;
+    }
+
+    &__right {
+        display: flex;
+    }
+
+    &__nav-icon-wrapper {
+        position: relative;
+    }
+
+    &__icon {
+        color: var(--color-white);
+        font-size: 4rem;
+        padding: 1.5rem;
+    }
+
+    &__link {
+        @include cover-link;
     }
 }
