@@ -11,7 +11,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 $errors = array();
-$id = $_GET['id'];
+$id = (isset($_GET['id']) ? $_GET['id'] : '');
 
 /**編集するレコードを取得 */
 try {
@@ -21,14 +21,13 @@ try {
   $selectListStmt->bindParam(':id', $id);
 
   /**元々表示されている編集されていない項目 */
-  if ($selectListStmt->execute()) {
-    $row = $selectListStmt->fetch(PDO::FETCH_ASSOC);
-    $title = $row['title'];
-    $author = $row['author'];
-    $status = $row['status'];
-    $score = $row['score'];
-    $note = $row['note'];
-  }
+  $selectListStmt->execute();
+  $row = $selectListStmt->fetch(PDO::FETCH_ASSOC);
+  $title = $row['title'] ?? '';
+  $author = $row['author'] ?? '';
+  $status = $row['status'] ?? '';
+  $score = $row['score'] ?? '';
+  $note = $row['note'] ?? '';
 } catch (PDOException $e) {
   die("Error: {$e->getMessage()}");
 }
@@ -36,11 +35,15 @@ try {
 
 if (isset($_POST['update-btn'])) {
 
+  if (array_key_exists('status', $_POST)) {
+    $status = $_POST['status'];
+  }
+
   /**編集した項目を変数に落としこむ */
   $id = $_POST['id'];
   $title = $_POST['title'];
   $author = $_POST['author'];
-  $status  = $_POST['status'];
+  $status;
   $score = $_POST['score'];
   $note = $_POST['note'];
 
@@ -174,11 +177,11 @@ if (isset($_POST['update-btn'])) {
           <div class="mb-2">
             <label for="score" class="label-text">評価</label>
             <select name="score" id="score" class="select-text">
-              <option value="1" <?php if ($row['score'] == "1") echo 'selected="selected"'; ?>>1</option>
-              <option value="2" <?php if ($row['score'] == "2") echo 'selected="selected"'; ?>>2</option>
-              <option value="3" <?php if ($row['score'] == "3") echo 'selected="selected"'; ?>>3</option>
-              <option value="4" <?php if ($row['score'] == "4") echo 'selected="selected"'; ?>>4</option>
-              <option value="5" <?php if ($row['score'] == "5") echo 'selected="selected"'; ?>>5</option>
+              <option value="1" <?php if ($score == "1") echo 'selected="selected"'; ?>>1</option>
+              <option value="2" <?php if ($score == "2") echo 'selected="selected"'; ?>>2</option>
+              <option value="3" <?php if ($score == "3") echo 'selected="selected"'; ?>>3</option>
+              <option value="4" <?php if ($score == "4") echo 'selected="selected"'; ?>>4</option>
+              <option value="5" <?php if ($score == "5") echo 'selected="selected"'; ?>>5</option>
             </select>
           </div>
           <div class="mb-2 new__column">

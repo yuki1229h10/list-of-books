@@ -112,7 +112,6 @@ if (isset($_POST['signup-btn'])) {
                 $_SESSION['username'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['verified'] = $verified;
-                $_SESSION['token'] = $token;
                 /**メールアドレスから認証を行わせる */
                 sendVerificationEmail($email, $token);
             } else {
