@@ -1,0 +1,13 @@
+-- +------------+--------------+------+-----+-------------------+-----------------------------------------------+
+-- | Field      | Type         | Null | Key | Default           | Extra                                         |
+-- +------------+--------------+------+-----+-------------------+-----------------------------------------------+
+-- | id         | int          | NO   | PRI | NULL              | auto_increment                                |
+-- | email      | varchar(200) | YES  |     | NULL              |                                               |
+-- | title      | varchar(255) | YES  |     | NULL              |                                               |
+-- | author     | varchar(255) | YES  |     | NULL              |                                               |
+-- | status     | varchar(20)  | YES  |     | NULL              |                                               |
+-- | score      | int          | YES  |     | NULL              |                                               |
+-- | note       | varchar(255) | YES  |     | NULL              |                                               |
+-- | created_at | datetime     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+-- | updated_at | datetime     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
+-- +------------+--------------+------+-----+-------------------+-----------------------------------------------+
