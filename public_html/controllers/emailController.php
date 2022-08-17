@@ -46,7 +46,7 @@ function sendVerificationEmail($email, $token)
             <div>
                 <p>ありがとうございます</p>
                 <p>リンクをクリックして認証を行なってください</p>
-                <a href="http://localhost:8888/list-of-books/src/new.php?token=' . $token . '">認証を行う</a>
+                <a href="https://ylistofbooks.com/new.php?token=' . $token . '">認証を行う</a>
             </div>
         </body>
 
