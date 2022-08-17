@@ -12,6 +12,7 @@ require_once 'lib/escape.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="好き、気になる本を記録するサイト">
     <title>ログイン</title>
     <link rel="stylesheet" href="stylesheets/css/main.css">
     <script src="https://kit.fontawesome.com/a610f5c929.js" crossorigin="anonymous"></script>
@@ -20,7 +21,7 @@ require_once 'lib/escape.php';
 <body>
     <div class="auth">
         <div class="auth__form-wrapper">
-            <form action="login.php" method="POST">
+            <form action="login.php" method="POST" novalidate>
                 <h3 class="heading-h3 auth__top">ログイン</h3>
                 <div class="auth__inner">
 

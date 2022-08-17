@@ -15,7 +15,7 @@ require_once '../PHPMailer/src/SMTP.php';
 
 function sendVerificationEmail($email, $token)
 {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
     $dotenv->load();
 
     $mail = new PHPMailer(true);

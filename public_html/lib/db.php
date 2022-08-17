@@ -4,7 +4,7 @@ require __DIR__ . '../../../vendor/autoload.php';
 
 function getDb(): PDO
 {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
     $dotenv->load();
 
     $dbDsn = $_ENV['DB_DSN'];

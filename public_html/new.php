@@ -1,7 +1,6 @@
 <?php
 
 require_once 'controllers/authController.php';
-require_once 'lib/db.php';
 require_once 'lib/escape.php';
 
 if (isset($_GET['token'])) {
@@ -95,6 +94,7 @@ if (isset($_POST['create-btn'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="好き、気になる本を記録するサイト">
     <title>ホーム</title>
     <link rel="stylesheet" href="stylesheets/css/main.css">
     <script src="https://kit.fontawesome.com/a610f5c929.js" crossorigin="anonymous"></script>
@@ -110,7 +110,7 @@ if (isset($_POST['create-btn'])) {
                         <?php echo $_SESSION['email']; ?>
                     </div>
                     <div class="div-text">
-                        メールアドレスに送信されたURLから登録を行なってください
+                        メールアドレスに送信されたURLで登録を行なってください
                     </div>
                 </div>
             </div>
@@ -122,7 +122,7 @@ if (isset($_POST['create-btn'])) {
         <header class="header">
             <nav class="header__nav">
                 <h1 class="heading-h1 header__left">
-                    Welcome, <?php echo $_SESSION['username']; ?>
+                    Add book
                 </h1>
                 <div class="header__right">
                     <div class="link header__nav-icon-wrapper">

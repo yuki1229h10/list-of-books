@@ -1,14 +1,18 @@
 <?php
 
 require_once 'controllers/authController.php';
-require_once 'lib/db.php';
 require_once 'lib/escape.php';
 
-
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['id']) && !isset($_SESSION['verified'])) {
   header('location: login.php');
   exit();
 }
+
+if (empty($_SESSION['verified'])) {
+  header('location: login.php');
+  exit();
+}
+
 
 $errors = array();
 $id = (isset($_GET['id']) ? $_GET['id'] : '');
@@ -102,6 +106,7 @@ if (isset($_POST['update-btn'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="好き、気になる本を記録するサイト">
   <title>編集画面</title>
   <link rel="stylesheet" href="stylesheets/css/main.css">
   <script src="https://kit.fontawesome.com/a610f5c929.js" crossorigin="anonymous"></script>
@@ -111,7 +116,7 @@ if (isset($_POST['update-btn'])) {
   <header class="header">
     <nav class="header__nav">
       <h1 class="heading-h1 header__left">
-        Edit
+        Edit book
       </h1>
       <div class="header__right">
         <div class="link header__nav-icon-wrapper">
@@ -139,7 +144,7 @@ if (isset($_POST['update-btn'])) {
           <?php endif; ?>
 
           <div class="mb-2 new__column">
-            <input type="hidden" name="id" value="<?php echo $id; ?>">
+            <input type="hidden" name="id" value="<?php echo escape($id); ?>">
             <label for="title" class="label-text">書籍名</label>
             <input type="text" name="title" id="title" value="<?php echo escape($title) ?>" class="input-text">
           </div>

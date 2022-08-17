@@ -1,10 +1,14 @@
 <?php
 
 require_once 'controllers/authController.php';
-require_once 'lib/db.php';
 require_once 'lib/escape.php';
 
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['id']) && !isset($_SESSION['verified'])) {
+  header('location: login.php');
+  exit();
+}
+
+if (empty($_SESSION['verified'])) {
   header('location: login.php');
   exit();
 }
@@ -26,7 +30,8 @@ try {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>読書一覧</title>
+    <meta name="description" content="好き、気になる本を記録するサイト">
+    <title>本の一覧</title>
     <link rel="stylesheet" href="stylesheets/css/main.css">
     <script src="https://kit.fontawesome.com/a610f5c929.js" crossorigin="anonymous"></script>
   </head>
