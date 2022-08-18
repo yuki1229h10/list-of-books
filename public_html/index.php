@@ -40,7 +40,7 @@ try {
     <header class="header">
       <nav class="header__nav">
         <h1 class="heading-h1 header__left">
-          <?php echo $_SESSION['username']; ?>'s Library
+          Library
         </h1>
         <div class="header__right">
           <div class="link header__nav-icon-wrapper">

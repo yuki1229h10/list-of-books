@@ -1,0 +1,13 @@
+8/18
+戻るボタンを押したら元のページに遷移させる
+index.phpのモバイルレイアウトを変更する
+
+変更点
+index.php
+main.css
+main.css.map
+
+_base.scss
+_layout.scss
+
+note.txt
